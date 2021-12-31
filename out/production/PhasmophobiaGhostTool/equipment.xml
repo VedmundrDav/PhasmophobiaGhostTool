@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<root>
+  <item>
+    <name>Spirit Box</name>
+    <required>Yes</required>
+  </item>
+  <item>
+    <name>Ghost Writing Book</name>
+    <required>Yes</required>
+  </item>
+  <item>
+    <name>Spirit Box</name>
+    <required>Yes</required>
+  </item>
+  <item>
+    <name>EMF Reader</name>
+    <required>Yes</required>
+  </item>
+  <item>
+    <name>UV Flashlight</name>
+    <required>Yes</required>
+  </item>
+  <item>
+    <name>Flashlight</name>
+    <required>Yes</required>
+  </item>
+  <item>
+    <name>Video Camera</name>
+    <required>Yes</required>
+  </item>
+  <item>
+    <name>Photo Camera</name>
+    <required>Yes</required>
+  </item>
+  <item>
+    <name>D.O.T.S. Projector</name>
+    <required>Yes</required>
+  </item>
+  <item>
+    <name>Candle</name>
+    <required>No</required>
+  </item>
+  <item>
+    <name>Crucifix</name>
+    <required>No</required>
+  </item>
+  <item>
+    <name>Glowstick</name>
+    <required>No</required>
+  </item>
+  <item>
+    <name>Head Mounted Camera</name>
+    <required>No</required>
+  </item>
+  <item>
+    <name>Lighter</name>
+    <required>No</required>
+  </item>
+  <item>
+    <name>Motion Sensor</name>
+    <required>No</required>
+  </item>
+  <item>
+    <name>Salt Shaker</name>
+    <required>No</required>
+  </item>
+  <item>
+    <name>Sanity Pills</name>
+    <required>No</required>
+  </item>
+  <item>
+    <name>Smudge Stick</name>
+    <required>No</required>
+  </item>
+  <item>
+    <name>Sound Sensor</name>
+    <required>No</required>
+  </item>
+  <item>
+    <name>Strong Flashlight</name>
+    <required>No</required>
+  </item>
+  <item>
+    <name>Thermometer</name>
+    <required>No</required>
+  </item>
+  <item>
+    <name>Tripod</name>
+    <required>No</required>
+  </item>
+</root>
