@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <root>
   <item>
-    <name>Spirit Box</name>
-    <required>Yes</required>
-  </item>
-  <item>
     <name>Ghost Writing Book</name>
     <required>Yes</required>
   </item>

@@ -4,9 +4,13 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedList;
 
 public class GUI extends JFrame {
     //for all vars that can be converted to local vars: LEAVE AS IS incase there are future updates.
+
     private JPanel ghostMainPanel;
     private JPanel evidencePanel;
     private JPanel ghostPanel;
@@ -34,6 +38,7 @@ public class GUI extends JFrame {
         ArrayList<JCheckBox> evidenceCheckBoxes = getEvidenceAsCheckBoxes(evidences);
         ArrayList<JButton> ghostButtons = getGhostsAsButtons(ghosts);
         ArrayList<JCheckBox> equipmentCheckBoxes = getEquipmentAsCheckBoxes(equipments);
+        sortEquipment(equipmentCheckBoxes);
 
         Border border = BorderFactory.createLineBorder(Color.black);
         Border emptyBorder = BorderFactory.createEmptyBorder(5,5,5,5);
@@ -58,7 +63,7 @@ public class GUI extends JFrame {
         notesPanel = new JPanel();
 
         notesTextPanel = new JPanel();
-        notesTextArea = new JTextArea(15,65);
+        notesTextArea = new JTextArea(20,65);
         notesTextArea.setLineWrap(true);
         JScrollPane scroller = new JScrollPane(notesTextArea,
                 JScrollPane.VERTICAL_SCROLLBAR_NEVER,
@@ -154,7 +159,6 @@ public class GUI extends JFrame {
             }
         }
     }
-
     private void enableDisableBtns(boolean b, ArrayList<JButton> btns, ArrayList<Ghost> ghosts, JCheckBox comp){
         for (Ghost ghost : ghosts) {
             if (!ghost.containsEvidence(comp.getText())) {
@@ -167,7 +171,6 @@ public class GUI extends JFrame {
         }
 
     }
-
     private void clearWorkspace(ArrayList<Ghost> ghosts, ArrayList<JButton> ghostButtons, JTextArea textArea){
         //reset checkboxes and button filtering
         Component[] checkBoxes = evidencePanel.getComponents();
@@ -210,6 +213,7 @@ public class GUI extends JFrame {
                         //i need this to instantiate a ghostdetailspanel when the btn is clicked.
                         //intellij keeps showing a warning.
                         GhostDetailsPanel ghostDetailsPanel = new GhostDetailsPanel(ghost);
+                        ghostDetailsPanel.setLocationRelativeTo(this);
                     }
                 }
 
@@ -228,4 +232,15 @@ public class GUI extends JFrame {
     private Border setTitledBorder(String title){
         return BorderFactory.createTitledBorder(title);
     }
+    private void sortEquipment(ArrayList<JCheckBox> list){
+        for(int i = 0; i < list.size()-1; i++){
+            for(int j = i + 1; j < list.size(); j++){
+                if(list.get(i).getText().compareTo(list.get(j).getText()) > 0){
+                    Collections.swap(list, i, j);
+                }
+            }
+        }
+    }
+
+
 }
