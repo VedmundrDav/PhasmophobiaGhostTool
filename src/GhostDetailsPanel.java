@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
+import java.util.Random;
 
 public class GhostDetailsPanel extends JFrame{
     private Ghost ghost;
@@ -40,14 +41,16 @@ public class GhostDetailsPanel extends JFrame{
         mainPanel.add(strength);
         mainPanel.add(weakness);
 
-        this.add(mainPanel);
-        this.setVisible(true);
-        this.setLayout(new FlowLayout());
-        this.setSize(new Dimension(500,200));
-        this.setResizable(false);
-        this.setTitle(ghost.getName());
-        this.setLocationRelativeTo(null);
-        this.setAlwaysOnTop(true);
+        Random random = new Random();
+
+        add(mainPanel);
+        setVisible(true);
+        setLayout(new FlowLayout());
+        setSize(new Dimension(500,200));
+        setResizable(false);
+        setTitle(ghost.getName());
+        setLocation(random.nextInt(1000), random.nextInt(500));
+        setAlwaysOnTop(true);
     }
 
     public Ghost getGhost() {

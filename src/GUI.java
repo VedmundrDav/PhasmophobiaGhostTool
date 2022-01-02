@@ -213,7 +213,7 @@ public class GUI extends JFrame {
                         //i need this to instantiate a ghostdetailspanel when the btn is clicked.
                         //intellij keeps showing a warning.
                         GhostDetailsPanel ghostDetailsPanel = new GhostDetailsPanel(ghost);
-                        ghostDetailsPanel.setLocationRelativeTo(this);
+                        //ghostDetailsPanel.setLocationRelativeTo(this);
                     }
                 }
 
