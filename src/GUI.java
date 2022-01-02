@@ -3,94 +3,45 @@ import javax.swing.border.Border;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.LinkedList;
+
 
 public class GUI extends JFrame {
     //for all vars that can be converted to local vars: LEAVE AS IS incase there are future updates.
 
-    private JPanel ghostMainPanel;
-    private JPanel evidencePanel;
-    private JPanel ghostPanel;
+    private EvidencePanel evidencePanel;
+    private GhostPanel ghostPanel;
 
-    private JPanel notesPanel;
-    private JPanel notesTextPanel;
-    private JPanel equipmentPanel;
+    //private NotesPanel notesPanel;
+    private NotesPanel notesTextPanel;
+    private EquipmentPanel equipmentPanel;
 
-    private JTextArea notesTextArea;
 
-    private JButton clearBtn;
-
-    private ArrayList<Ghost> ghosts;
-    private ArrayList<Evidence> evidences;
-    private ArrayList<Equipment> equipments;
+    private GhostButton resetBtn;
 
     public GUI(){
         buildGUI();
     }
     private void buildGUI(){
-        ghosts = getGhosts();
-        evidences = getEvidences();
-        equipments = getEquipment();
 
-        ArrayList<JCheckBox> evidenceCheckBoxes = getEvidenceAsCheckBoxes(evidences);
-        ArrayList<JButton> ghostButtons = getGhostsAsButtons(ghosts);
-        ArrayList<JCheckBox> equipmentCheckBoxes = getEquipmentAsCheckBoxes(equipments);
-        sortEquipment(equipmentCheckBoxes);
+        resetBtn = new GhostButton("Reset");
 
-        Border border = BorderFactory.createLineBorder(Color.black);
-        Border emptyBorder = BorderFactory.createEmptyBorder(5,5,5,5);
-
-        //layouts for the ghostbuttons and equipment checkboxes
-        GridLayout ghostBtnLayout = new GridLayout(ghostButtons.size()/2, ghostButtons.size()/2);
-        ghostBtnLayout.setHgap(5);
-        ghostBtnLayout.setVgap(5);
-        GridLayout equipmentLayout = new GridLayout(equipmentCheckBoxes.size()/5, equipmentCheckBoxes.size()/2);
-
-        ghostMainPanel = new JPanel();
-        ghostMainPanel.setLayout(new BoxLayout(ghostMainPanel, BoxLayout.PAGE_AXIS));
-        evidencePanel = new JPanel();
-
-        ghostPanel = new JPanel();
-        ghostPanel.setLayout(ghostBtnLayout);
-        ghostPanel.setBorder(emptyBorder);
-
+        evidencePanel = new EvidencePanel();
+        evidencePanel.add(resetBtn);
+        ghostPanel = new GhostPanel();
+        ghostPanel.determineAvailableGhosts(evidencePanel);
+        GhostMainPanel ghostMainPanel = new GhostMainPanel(evidencePanel, ghostPanel);
         ghostMainPanel.add(evidencePanel);
         ghostMainPanel.add(ghostPanel);
-        ghostPanel.setBackground(GUIConstants.backGroundColor);
-        evidencePanel.setBackground(GUIConstants.backGroundColor);
 
-        notesPanel = new JPanel();
+        notesTextPanel = new NotesPanel();
+        equipmentPanel = new EquipmentPanel();
+        NotesMainPanel notesMainPanel = new NotesMainPanel(notesTextPanel, equipmentPanel);
 
-        notesTextPanel = new JPanel();
-        notesTextArea = new JTextArea(20,65);
-        notesTextArea.setBackground(GUIConstants.JTextAreaColor);
-        notesTextArea.setLineWrap(true);
-        JScrollPane scroller = new JScrollPane(notesTextArea,
-                JScrollPane.VERTICAL_SCROLLBAR_NEVER,
-                JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
-        notesTextArea.setBorder(border);
-        notesTextPanel.add(scroller);
-        notesTextPanel.setBorder(setTitledBorder("Notes:"));
-        notesTextPanel.setBackground(GUIConstants.backGroundColor);
-
-        equipmentPanel = new JPanel();
-        equipmentPanel.setLayout(equipmentLayout);
-        equipmentPanel.setBorder(setTitledBorder("Equipment in Ghost Room"));
-        equipmentPanel.setBackground(GUIConstants.backGroundColor);
-
-        notesPanel.setLayout(new GridLayout(1,2));
-        notesPanel.add(notesTextPanel);
-        notesPanel.add(equipmentPanel);
-        //creates all buttons and checkboxes
-        createComponents(ghostButtons, evidenceCheckBoxes, equipmentCheckBoxes);
-
+        //this Frame methods
+        addActionListeners();
         add(ghostMainPanel);
-        add(notesPanel);
+        add(notesMainPanel);
         setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
         setSize(new Dimension(1500, 750));
         setVisible(true);
@@ -98,167 +49,26 @@ public class GUI extends JFrame {
         setResizable(false);
         setTitle("Phasmophobia Ghost Tool");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        determineAvailableGhosts(ghosts, ghostButtons);
-
-        clearBtn.addActionListener(e -> clearWorkspace(ghosts, ghostButtons, notesTextArea));
-
     }
 
-    private ArrayList<Ghost> getGhosts(){
-        return GhostProcessor.readGhostXMLIntoGhost();
-    }
-    private ArrayList<Evidence> getEvidences(){
-        return GhostProcessor.readEvidenceXMLIntoEvidence();
-    }
-    private ArrayList<Equipment> getEquipment(){return GhostProcessor.readEquipmentXMLIntoEquipment();}
-    private ArrayList<JCheckBox> getEvidenceAsCheckBoxes(ArrayList<Evidence> evidences){
-        //ArrayList<Evidence> evidences = FileProcessor.readEvidenceXMLIntoEvidence();
-        ArrayList<JCheckBox> evidenceCheckBoxes= new ArrayList<>();
-        for(Evidence evidence : evidences){
-            JCheckBox checkBox = new JCheckBox(evidence.getName());
-            evidenceCheckBoxes.add(checkBox);
-        }
-        return evidenceCheckBoxes;
-    }
-    private ArrayList<JButton> getGhostsAsButtons(ArrayList<Ghost> ghosts){
-        //ArrayList<Ghost> ghosts = FileProcessor.readGhostXMLIntoGhost();
-        ArrayList<JButton> ghostButtons = new ArrayList<>();
-        for(Ghost ghost : ghosts){
-            JButton button = new JButton(ghost.getName());
-            ghostButtons.add(button);
-        }
-        return ghostButtons;
-    }
-    private ArrayList<JCheckBox> getEquipmentAsCheckBoxes(ArrayList<Equipment> equipments){
-        ArrayList<JCheckBox> equipmentCheckBoxes= new ArrayList<>();
-        for(Equipment equipment : equipments){
-            JCheckBox checkBox = new JCheckBox(equipment.getName());
-            equipmentCheckBoxes.add(checkBox);
-        }
-        return equipmentCheckBoxes;
-    }
-    private void determineAvailableGhosts(ArrayList<Ghost> ghosts, ArrayList<JButton> ghostButtons){
-        Component[] evidencePanelComponents = evidencePanel.getComponents();
-        for (Component comp : evidencePanelComponents) {
-            if (comp instanceof JCheckBox) {
-                ((JCheckBox) comp).addItemListener(e -> {
-                    if (e.getStateChange() == ItemEvent.SELECTED) {
-                        if (comp instanceof JCheckBox) {
-                            enableDisableBtns(false, ghostButtons, ghosts, (JCheckBox) comp);
-                        }
-                    } else {
-                        if(comp instanceof JCheckBox) {
-                            enableDisableBtns(true, ghostButtons, ghosts, (JCheckBox) comp);
-                            //comb the list for checkboxes that are checked and disable buttons accordingly
-                            for(Component dcomp : evidencePanelComponents){
-                                if(dcomp instanceof JCheckBox && ((JCheckBox) dcomp).isSelected()){
-                                    enableDisableBtns(false, ghostButtons, ghosts, (JCheckBox) dcomp);
-                                }
-                            }
-                        }
 
-                    }
-                });
-
-            }
-        }
-    }
-    private void enableDisableBtns(boolean b, ArrayList<JButton> btns, ArrayList<Ghost> ghosts, JCheckBox comp){
-        for (Ghost ghost : ghosts) {
-            if (!ghost.containsEvidence(comp.getText())) {
-                for (JButton btn : btns) {
-                    if (ghost.getName().equals(btn.getText())) {
-                        btn.setEnabled(b);
-                        if(b){
-                            btn.setBackground(GUIConstants.btnColor);
-                        }else{
-                            btn.setBackground(GUIConstants.disabledBtnColor);
-                        }
-                    }
-                }
-            }
-        }
+    private void clearWorkspace(EvidencePanel evidence, GhostPanel ghosts, EquipmentPanel equipment, NotesPanel notes){
+        //TODO: fix.
+        equipment.reset();
+        ghosts.reset();
+        evidence.reset();
+        notes.reset();
+        //get all opn ghost details panels and close them
 
     }
-    private void clearWorkspace(ArrayList<Ghost> ghosts, ArrayList<JButton> ghostButtons, JTextArea textArea){
-        //reset checkboxes and button filtering
-        Component[] checkBoxes = evidencePanel.getComponents();
-        for(Component comp : checkBoxes){
-            if(comp instanceof JCheckBox){
-                ((JCheckBox) comp).setSelected(false);
-                determineAvailableGhosts(ghosts, ghostButtons);
-            }
-        }
-        //clear any open windows
-        Frame[] openGhosts = JFrame.getFrames();
-        for(Frame frame : openGhosts){
-            if(!frame.getTitle().equals("Phasmophobia Ghost Tool")){
-                frame.dispose();
-            }
-        }
-
-        //clear text area
-        textArea.setText("");
-
-        //clear the equipment panel
-        Component[] equipmentBoxes = equipmentPanel.getComponents();
-        for(Component comp : equipmentBoxes){
-            if(comp instanceof JCheckBox){
-                ((JCheckBox) comp).setSelected(false);
-            }
-        }
-
-    }
-    private void createComponents(ArrayList<JButton> ghostButtons,
-                                  ArrayList<JCheckBox> evidenceCheckBoxes,
-                                  ArrayList<JCheckBox> equipmentCheckBoxes){
-
-        for(JButton btn : ghostButtons){
-            btn.setBackground(GUIConstants.btnColor);
-            ghostPanel.add(btn);
-            btn.addActionListener(e -> {
-                //display a pop up window with the ghost info
-                for(Ghost ghost : ghosts){
-                    if(ghost.getName().equals(btn.getText())){
-                        //i need this to instantiate a ghostdetailspanel when the btn is clicked.
-                        //intellij keeps showing a warning.
-                        GhostDetailsPanel ghostDetailsPanel = new GhostDetailsPanel(ghost);
-                        //ghostDetailsPanel.setLocationRelativeTo(this);
-                    }
-                }
-
-            });
-        }
-        for(JCheckBox checkBox : equipmentCheckBoxes){
-            equipmentPanel.add(checkBox);
-            checkBox.setBackground(GUIConstants.backGroundColor);
-            checkBox.setForeground(Color.white);
-
-        }
-        for(JCheckBox checkBox : evidenceCheckBoxes){
-
-            evidencePanel.add(checkBox);
-            checkBox.setBackground(GUIConstants.backGroundColor);
-            checkBox.setForeground(Color.white);
-
-        }
-        clearBtn = new JButton("Clear");
-        clearBtn.setBackground(GUIConstants.btnColor);
-        evidencePanel.add(clearBtn);
-    }
-    private Border setTitledBorder(String title){
+    public static Border setTitledBorder(String title){
         TitledBorder titledBorder = BorderFactory.createTitledBorder(title);
         titledBorder.setTitleColor(GUIConstants.textAndBorderColor);
         return titledBorder;
     }
-    private void sortEquipment(ArrayList<JCheckBox> list){
-        for(int i = 0; i < list.size()-1; i++){
-            for(int j = i + 1; j < list.size(); j++){
-                if(list.get(i).getText().compareTo(list.get(j).getText()) > 0){
-                    Collections.swap(list, i, j);
-                }
-            }
-        }
+    private void addActionListeners(){
+        //condense into a "listeners function"
+        resetBtn.addActionListener(e -> clearWorkspace(evidencePanel, ghostPanel, equipmentPanel, notesTextPanel));
     }
 
 
