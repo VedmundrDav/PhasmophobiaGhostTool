@@ -1,5 +1,6 @@
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.InputStream;
@@ -246,7 +247,9 @@ public class GUI extends JFrame {
         evidencePanel.add(clearBtn);
     }
     private Border setTitledBorder(String title){
-        return BorderFactory.createTitledBorder(title);
+        TitledBorder titledBorder = BorderFactory.createTitledBorder(title);
+        titledBorder.setTitleColor(GUIConstants.textAndBorderColor);
+        return titledBorder;
     }
     private void sortEquipment(ArrayList<JCheckBox> list){
         for(int i = 0; i < list.size()-1; i++){
