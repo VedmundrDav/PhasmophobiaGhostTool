@@ -7,7 +7,7 @@ import java.awt.event.*;
 
 public class GUI extends JFrame {
     //for all vars that can be converted to local vars: LEAVE AS IS incase there are future updates.
-
+    private final String title = "Phasmophobia Ghost Tool";
     private EvidencePanel evidencePanel;
     private GhostPanel ghostPanel;
 
@@ -47,7 +47,7 @@ public class GUI extends JFrame {
         setVisible(true);
         setLocationRelativeTo(null);
         setResizable(false);
-        setTitle("Phasmophobia Ghost Tool");
+        setTitle(title);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
@@ -62,7 +62,7 @@ public class GUI extends JFrame {
     private void closeGhostFrames(){
         Frame[] frames = Frame.getFrames();
         for(Frame f : frames){
-            if(!f.getTitle().equals("Phasmophobia Ghost Tool")){
+            if(!f.getTitle().equals(title)){
                 f.dispose();
             }
         }

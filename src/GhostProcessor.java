@@ -33,7 +33,6 @@ public class GhostProcessor {
                         for(int j = 0; j < content.getLength(); j++){
                             Node contentNode = content.item(j);
                             if(contentNode.getNodeName().equals("type")){
-                                //System.out.println(contentNode.getTextContent());
                                 ghost.setName(contentNode.getTextContent());
                             }else if(contentNode.getNodeName().equals("evidence_1")){
                                 ghost.setEvidence_1(contentNode.getTextContent());
@@ -76,7 +75,6 @@ public class GhostProcessor {
                         for(int j = 0; j < content.getLength(); j++){
                             Node contentNode = content.item(j);
                             if(contentNode.getNodeName().equals("name")){
-                                //System.out.println(contentNode.getTextContent());
                                 equipment.setName(contentNode.getTextContent());
                             }else if(contentNode.getNodeName().equals("required")){
                                 if(contentNode.getTextContent().equals("Yes")){
@@ -100,7 +98,6 @@ public class GhostProcessor {
     }
 
     public static ArrayList<Evidence> readEvidenceXMLIntoEvidence(){
-        //File file = new File(evidencePath);
         InputStream file = GhostProcessor.class.getResourceAsStream(evidencePath);
         ArrayList<Evidence> evidences = new ArrayList<>();
         try{
@@ -116,7 +113,6 @@ public class GhostProcessor {
                         for(int j = 0; j < content.getLength(); j++){
                             Node contentNode = content.item(j);
                             if(contentNode.getNodeName().equals("name")){
-                                //System.out.println(contentNode.getTextContent());
                                 evidence.setName(contentNode.getTextContent());
                             }
                         }

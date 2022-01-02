@@ -20,8 +20,6 @@ public class GhostLabel  extends JLabel {
         super.setForeground(this.foreColor);
         super.setBackground(this.backColor);
         super.setVisible(true);
-
-        System.out.println(this.getLabelText());
     }
 
     public Color getForeColor() {
