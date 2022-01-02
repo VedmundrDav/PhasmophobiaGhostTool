@@ -130,42 +130,44 @@ public class GUI extends JFrame {
     }
     private void determineAvailableGhosts(ArrayList<Ghost> ghosts, ArrayList<JButton> ghostButtons){
         Component[] evidencePanelComponents = evidencePanel.getComponents();
-        for(Component comp : evidencePanelComponents){
-            if(comp instanceof JCheckBox){
+        for (Component comp : evidencePanelComponents) {
+            if (comp instanceof JCheckBox) {
                 ((JCheckBox) comp).addItemListener(e -> {
-                    if(e.getStateChange() == ItemEvent.SELECTED){
-                        if(((JCheckBox) comp).isSelected()){
-                            //disable every ghost button that does not contain this item
-                            for(Ghost ghost : ghosts) {
-                                if (!ghost.containsEvidence(((JCheckBox) comp).getText())) {
-                                    //disable the damn thing
-                                    for (JButton btn : ghostButtons) {
-                                        if (ghost.getName().equals(btn.getText())) {
-                                            btn.setEnabled(false);
-                                        }
-                                    }
+                    if (e.getStateChange() == ItemEvent.SELECTED) {
+                        if (comp instanceof JCheckBox) {
+                            enableDisableBtns(false, ghostButtons, ghosts, (JCheckBox) comp);
+                        }
+                    } else {
+                        if(comp instanceof JCheckBox) {
+                            enableDisableBtns(true, ghostButtons, ghosts, (JCheckBox) comp);
+                            //comb the list for checkboxes that are checked and disable buttons accordingly
+                            for(Component dcomp : evidencePanelComponents){
+                                if(dcomp instanceof JCheckBox && ((JCheckBox) dcomp).isSelected()){
+                                    enableDisableBtns(false, ghostButtons, ghosts, (JCheckBox) dcomp);
                                 }
                             }
                         }
-                    }else {
-                        if (!((JCheckBox) comp).isSelected()) {
-                            for (Ghost ghost : ghosts) {
-                                if (!ghost.containsEvidence(((JCheckBox) comp).getText())) {
-                                    //disable the damn thing
-                                    for (JButton btn : ghostButtons) {
-                                        if (ghost.getName().equals(btn.getText())) {
-                                            btn.setEnabled(true);
-                                        }
-                                    }
-                                }
-                            }
-                        }
+
                     }
                 });
 
             }
         }
     }
+
+    private void enableDisableBtns(boolean b, ArrayList<JButton> btns, ArrayList<Ghost> ghosts, JCheckBox comp){
+        for (Ghost ghost : ghosts) {
+            if (!ghost.containsEvidence(comp.getText())) {
+                for (JButton btn : btns) {
+                    if (ghost.getName().equals(btn.getText())) {
+                        btn.setEnabled(b);
+                    }
+                }
+            }
+        }
+
+    }
+
     private void clearWorkspace(ArrayList<Ghost> ghosts, ArrayList<JButton> ghostButtons, JTextArea textArea){
         //reset checkboxes and button filtering
         Component[] checkBoxes = evidencePanel.getComponents();
