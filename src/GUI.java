@@ -53,13 +53,19 @@ public class GUI extends JFrame {
 
 
     private void clearWorkspace(EvidencePanel evidence, GhostPanel ghosts, EquipmentPanel equipment, NotesPanel notes){
-        //TODO: fix.
         equipment.reset();
         ghosts.reset();
         evidence.reset();
         notes.reset();
-        //get all opn ghost details panels and close them
-
+        closeGhostFrames();
+    }
+    private void closeGhostFrames(){
+        Frame[] frames = Frame.getFrames();
+        for(Frame f : frames){
+            if(!f.getTitle().equals("Phasmophobia Ghost Tool")){
+                f.dispose();
+            }
+        }
     }
     public static Border setTitledBorder(String title){
         TitledBorder titledBorder = BorderFactory.createTitledBorder(title);
