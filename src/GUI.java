@@ -59,11 +59,14 @@ public class GUI extends JFrame {
 
         ghostMainPanel.add(evidencePanel);
         ghostMainPanel.add(ghostPanel);
+        ghostPanel.setBackground(GUIConstants.backGroundColor);
+        evidencePanel.setBackground(GUIConstants.backGroundColor);
 
         notesPanel = new JPanel();
 
         notesTextPanel = new JPanel();
         notesTextArea = new JTextArea(20,65);
+        notesTextArea.setBackground(GUIConstants.JTextAreaColor);
         notesTextArea.setLineWrap(true);
         JScrollPane scroller = new JScrollPane(notesTextArea,
                 JScrollPane.VERTICAL_SCROLLBAR_NEVER,
@@ -72,15 +75,16 @@ public class GUI extends JFrame {
         notesTextArea.setBorder(border);
         notesTextPanel.add(scroller);
         notesTextPanel.setBorder(setTitledBorder("Notes:"));
+        notesTextPanel.setBackground(GUIConstants.backGroundColor);
 
         equipmentPanel = new JPanel();
         equipmentPanel.setLayout(equipmentLayout);
         equipmentPanel.setBorder(setTitledBorder("Equipment in Ghost Room"));
+        equipmentPanel.setBackground(GUIConstants.backGroundColor);
 
         notesPanel.setLayout(new GridLayout(1,2));
         notesPanel.add(notesTextPanel);
         notesPanel.add(equipmentPanel);
-
         //creates all buttons and checkboxes
         createComponents(ghostButtons, evidenceCheckBoxes, equipmentCheckBoxes);
 
@@ -93,7 +97,6 @@ public class GUI extends JFrame {
         setResizable(false);
         setTitle("Phasmophobia Ghost Tool");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         determineAvailableGhosts(ghosts, ghostButtons);
 
         clearBtn.addActionListener(e -> clearWorkspace(ghosts, ghostButtons, notesTextArea));
@@ -165,6 +168,11 @@ public class GUI extends JFrame {
                 for (JButton btn : btns) {
                     if (ghost.getName().equals(btn.getText())) {
                         btn.setEnabled(b);
+                        if(b){
+                            btn.setBackground(GUIConstants.btnColor);
+                        }else{
+                            btn.setBackground(GUIConstants.disabledBtnColor);
+                        }
                     }
                 }
             }
@@ -205,6 +213,7 @@ public class GUI extends JFrame {
                                   ArrayList<JCheckBox> equipmentCheckBoxes){
 
         for(JButton btn : ghostButtons){
+            btn.setBackground(GUIConstants.btnColor);
             ghostPanel.add(btn);
             btn.addActionListener(e -> {
                 //display a pop up window with the ghost info
@@ -219,14 +228,21 @@ public class GUI extends JFrame {
 
             });
         }
-        for(JCheckBox chkBox : equipmentCheckBoxes){
-            equipmentPanel.add(chkBox);
+        for(JCheckBox checkBox : equipmentCheckBoxes){
+            equipmentPanel.add(checkBox);
+            checkBox.setBackground(GUIConstants.backGroundColor);
+            checkBox.setForeground(Color.white);
+
         }
         for(JCheckBox checkBox : evidenceCheckBoxes){
-            evidencePanel.add(new JCheckBox(checkBox.getText()));
+
+            evidencePanel.add(checkBox);
+            checkBox.setBackground(GUIConstants.backGroundColor);
+            checkBox.setForeground(Color.white);
 
         }
         clearBtn = new JButton("Clear");
+        clearBtn.setBackground(GUIConstants.btnColor);
         evidencePanel.add(clearBtn);
     }
     private Border setTitledBorder(String title){
