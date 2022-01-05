@@ -1,34 +1,33 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class EvidencePanel extends JPanel {
     private ArrayList<Evidence> evidences;
-    ArrayList<GhostCheckBox> evidenceCheckBoxes;
+    private ArrayList<GhostCheckBox> ghostCheckBoxes;
 
+    private ArrayList<Ghost> ghosts;
     EvidencePanel(){
         evidences = getEvidences();
-        evidenceCheckBoxes = getEvidenceAsCheckBoxes(evidences);
+        ghostCheckBoxes = getEvidenceAsCheckBoxes(evidences);
         setBackground(GUIConstants.backGroundColor);
         createComponents();
+
     }
     private ArrayList<Evidence> getEvidences(){
         return GhostProcessor.readEvidenceXMLIntoEvidence();
     }
 
     private ArrayList<GhostCheckBox> getEvidenceAsCheckBoxes(ArrayList<Evidence> evidences){
-        ArrayList<GhostCheckBox> evidenceCheckBoxes= new ArrayList<>();
+        ArrayList<GhostCheckBox> ghostCheckBoxes = new ArrayList<>();
         for(Evidence evidence : evidences){
             GhostCheckBox checkBox = new GhostCheckBox(evidence.getName());
-            evidenceCheckBoxes.add(checkBox);
+            ghostCheckBoxes.add(checkBox);
         }
-        return evidenceCheckBoxes;
+        return ghostCheckBoxes;
     }
     private void createComponents(){
-        for(GhostCheckBox checkBox : evidenceCheckBoxes){
-
+        for(GhostCheckBox checkBox : ghostCheckBoxes){
             add(checkBox);
             checkBox.setBackground(GUIConstants.backGroundColor);
             checkBox.setForeground(Color.white);
@@ -37,10 +36,17 @@ public class EvidencePanel extends JPanel {
 
     }
     public void reset(){
-        for(GhostCheckBox chkBox : evidenceCheckBoxes){
+        for(GhostCheckBox chkBox : ghostCheckBoxes){
             if(chkBox.isSelected()){
                 chkBox.setSelected(false);
             }
         }
+    }
+
+    public ArrayList<GhostCheckBox> getEvidence(){
+        return ghostCheckBoxes;
+    }
+    public void setGhosts(ArrayList<Ghost> ghosts) {
+        this.ghosts = ghosts;
     }
 }

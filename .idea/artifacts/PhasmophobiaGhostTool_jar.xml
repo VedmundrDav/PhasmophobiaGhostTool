@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="PhasmophobiaGhostTool:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/PhasmophobiaGhostTool_jar</output-path>
-    <root id="archive" name="PhasmophobiaGhostTool.jar">
-      <element id="module-output" name="PhasmophobiaGhostTool" />
-    </root>
-  </artifact>
-</component>

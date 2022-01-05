@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class Ghost {
 
     private String name;
@@ -26,6 +28,15 @@ public class Ghost {
             return false;
         }
         return true;
+    }
+    public GhostButton getCorrespondingButton(ArrayList<GhostButton> btns){
+        GhostButton retVal = null;
+        for(GhostButton btn : btns){
+            if(name.equals(btn.getText())){
+                retVal = btn;
+            }
+        }
+        return retVal;
     }
 
     public String getName() {

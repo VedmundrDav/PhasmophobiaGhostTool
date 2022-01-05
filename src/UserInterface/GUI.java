@@ -29,6 +29,7 @@ public class GUI extends JFrame {
         evidencePanel.add(resetBtn);
         ghostPanel = new GhostPanel();
         ghostPanel.determineAvailableGhosts(evidencePanel);
+        evidencePanel.setGhosts(ghostPanel.getGhostList());
         GhostMainPanel ghostMainPanel = new GhostMainPanel(evidencePanel, ghostPanel);
         ghostMainPanel.add(evidencePanel);
         ghostMainPanel.add(ghostPanel);
@@ -36,7 +37,6 @@ public class GUI extends JFrame {
         notesTextPanel = new NotesPanel();
         equipmentPanel = new EquipmentPanel();
         NotesMainPanel notesMainPanel = new NotesMainPanel(notesTextPanel, equipmentPanel);
-
 
         //this Frame methods
         addActionListeners();

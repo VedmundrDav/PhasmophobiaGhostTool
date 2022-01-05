@@ -19,11 +19,11 @@ public class GhostPanel extends JPanel {
         createComponents();
     }
 
-    private ArrayList<Ghost> getGhosts(){
+    private ArrayList<Ghost> getGhosts() {
         return GhostProcessor.readGhostXMLIntoGhost();
     }
 
-    private ArrayList<GhostButton> getGhostsAsButtons(ArrayList<Ghost> ghosts){
+    private ArrayList<GhostButton> getGhostsAsButtons(ArrayList<Ghost> ghosts) {
         ArrayList<GhostButton> ghostButtons = new ArrayList<>();
         for(Ghost ghost : ghosts){
             GhostButton button = new GhostButton(ghost.getName());
@@ -55,13 +55,14 @@ public class GhostPanel extends JPanel {
             if (comp instanceof GhostCheckBox) {
                 ((GhostCheckBox) comp).addItemListener(e -> {
                     if (e.getStateChange() == ItemEvent.SELECTED) {
-                        enableDisableBtns(false, ghostButtons, ghosts, (JCheckBox) comp);
+                        enableDisableBtns(false, ghostButtons, ghosts, (GhostCheckBox) comp);
+                        enableDisableCheckBoxes(evidencePanelComponents);
                     } else {
-                        enableDisableBtns(true, ghostButtons, ghosts, (JCheckBox) comp);
-                        //comb the list for checkboxes that are checked and disable buttons accordingly
+                        enableDisableBtns(true, ghostButtons, ghosts, (GhostCheckBox) comp);
                         for (Component dcomp : evidencePanelComponents) {
                             if (dcomp instanceof JCheckBox && ((JCheckBox) dcomp).isSelected()) {
-                                enableDisableBtns(false, ghostButtons, ghosts, (JCheckBox) dcomp);
+                                enableDisableBtns(false, ghostButtons, ghosts, (GhostCheckBox) dcomp);
+                                enableDisableCheckBoxes(evidencePanelComponents);
                             }
                         }
                     }
@@ -71,15 +72,27 @@ public class GhostPanel extends JPanel {
         }
     }
 
-    private void enableDisableBtns(boolean b, ArrayList<GhostButton> btns, ArrayList<Ghost> ghosts, JCheckBox comp){
+    private void enableDisableCheckBoxes(Component[] evidenceCheckBoxes) {
+        for (Component checkBox : evidenceCheckBoxes) {
+            if (checkBox instanceof GhostCheckBox) {
+                if (!((GhostCheckBox) checkBox).isCheckBoxAPossibility(ghosts, ghostButtons)) {
+                    checkBox.setEnabled(false);
+                } else {
+                    checkBox.setEnabled(true);
+                }
+            }
+        }
+    }
+
+    private void enableDisableBtns(boolean b, ArrayList<GhostButton> btns, ArrayList<Ghost> ghosts, GhostCheckBox comp) {
         for (Ghost ghost : ghosts) {
             if (!ghost.containsEvidence(comp.getText())) {
                 for (JButton btn : btns) {
                     if (ghost.getName().equals(btn.getText())) {
                         btn.setEnabled(b);
-                        if(b){
+                        if (b) {
                             btn.setBackground(GUIConstants.btnColor);
-                        }else{
+                        } else {
                             btn.setBackground(GUIConstants.disabledBtnColor);
                         }
                     }
@@ -100,11 +113,16 @@ public class GhostPanel extends JPanel {
     public void setGhostButtons(ArrayList<GhostButton> ghostButtons) {
         this.ghostButtons = ghostButtons;
     }
-    public void reset(){
-        for(JButton btn : ghostButtons){
-            if(!btn.isEnabled()){
+
+    public void reset() {
+        for (JButton btn : ghostButtons) {
+            if (!btn.isEnabled()) {
                 btn.setEnabled(false);
             }
         }
+    }
+
+    public ArrayList<Ghost> getGhostList() {
+        return ghosts;
     }
 }
