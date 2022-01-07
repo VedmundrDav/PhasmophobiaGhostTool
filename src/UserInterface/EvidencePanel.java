@@ -39,6 +39,7 @@ public class EvidencePanel extends JPanel {
         for(GhostCheckBox chkBox : ghostCheckBoxes){
             if(chkBox.isSelected()){
                 chkBox.setSelected(false);
+                chkBox.setEnabled(true);
             }
         }
     }
